@@ -8,6 +8,7 @@ class App extends Component {
         super(props);
 
         this.state = {
+            validityStatus: {},
             submitted: false,
             testInput: 'test input'
         };
@@ -21,6 +22,13 @@ class App extends Component {
     }
 
     onValidityChanged = (input, errorMessage) => {
+        const validityStatus = { ...this.state.validityStatus };
+        validityStatus[input.name] = errorMessage;
+        this.setState({ validityStatus });
+    }
+
+    isFormValid = () => {
+        return Object.keys(this.state.validityStatus).filter(item => !!this.state.validityStatus[item]).length === 0;
     }
 
     // demo validation Rules
@@ -40,9 +48,10 @@ class App extends Component {
         return 'value length should be less than ten';
     }
 
-    onChange =(e)=>{
-        this.setState({[e.target.name]: e.target.value});
+    onChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value });
     }
+
     render() {
         return (
             <div>
@@ -51,20 +60,23 @@ class App extends Component {
                         <label>Input</label>
                         <Input submitted={this.state.submitted}
                             onValidityChanged={this.onValidityChanged}
-                            validationRules={[this.shouldBeEven, this.shouldBeLessThanTen]} 
+                            validationRules={[this.shouldBeEven, this.shouldBeLessThanTen]}
                             name="testInput"
                             value={this.state.testInput}
-                            onChange={this.onChange}/>
+                            onChange={this.onChange} />
                     </div>
                     <div className="control-group">
                         <label>Autocomplete</label>
-                        <Autocomplete items={this.autocompleteItems} id="testAutocomplete"
+                        <Autocomplete items={this.autocompleteItems}
+                            id="testAutocomplete"
+                            name="testAutocomplete"
                             submitted={this.state.submitted}
                             onValidityChanged={this.onValidityChanged}
                             validationRules={[this.required]} />
                     </div>
                     <button onClick={this.onSubmit}>Submit</button>
                 </form>
+                Form is valid: {this.isFormValid() ? 'yes' : 'no'}
             </div>
         )
     }
