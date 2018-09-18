@@ -31,7 +31,7 @@ class App extends Component {
         return Object.keys(this.state.validityStatus).filter(item => !!this.state.validityStatus[item]).length === 0;
     }
 
-    // demo validation Rules
+    // sample validation Rules
     required = (value) => !!value ? '' : 'this field is required';
 
     shouldBeEven = (value) => {
