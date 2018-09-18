@@ -193,7 +193,9 @@ var Autocomplete = function (_Component) {
 
 Autocomplete.propTypes = {
     items: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired,
-    id: _propTypes2.default.string.isRequired
+    id: _propTypes2.default.string.isRequired,
+    submitted: _propTypes2.default.bool.isRequired,
+    onValidityChanged: _propTypes2.default.func.isRequired
 };
 
 exports.Autocomplete = Autocomplete;

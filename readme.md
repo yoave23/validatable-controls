@@ -25,7 +25,7 @@ class App extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         this.setState({ submitted: true });
-        if (!this.isFormValid) {
+        if (!this.isFormValid()) {
             return;
         }
         // your submit logic...
