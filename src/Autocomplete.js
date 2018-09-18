@@ -129,7 +129,7 @@ class Autocomplete extends Component {
             <div className="validatable autocomplete">
                 <input type="text" ref={this.autoCompleteRef} onChange={this.onChange}
                     value={this.state.searchValue}
-                    onKeyDown={this.onKeyDown} 
+                    onKeyDown={this.onKeyDown}
                     {...getStrippedProps(this.props, this.reservedProps)} onBlur={this.onBlur} />
                 <div id={this.props.id + "autocomplete-list"} className="autocomplete-items">
                     {this.getItems()}
@@ -144,7 +144,9 @@ class Autocomplete extends Component {
 
 Autocomplete.propTypes = {
     items: PropTypes.arrayOf(PropTypes.string).isRequired,
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    submitted: PropTypes.bool.isRequired,
+    onValidityChanged: PropTypes.func.isRequired
 };
 
 export { Autocomplete };
