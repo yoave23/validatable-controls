@@ -29,7 +29,7 @@ class Autocomplete extends Component {
     }
 
     closeList = (element) => {
-        this.setState({ matchingItems: [] });
+        this.setState({ matchingItems: [], currentFocus: -1 });
     }
 
     onItemClick = (value) => {
@@ -81,7 +81,9 @@ class Autocomplete extends Component {
                 this.setState({ currentFocus: this.state.currentFocus - 1 });
                 break;
             case 13:
-                this.setState({ currentFocus: this.state.currentFocus - 1 });
+                if (this.state.currentFocus > -1) {
+                    this.onItemClick(this.state.matchingItems[this.state.currentFocus]);
+                }
                 break;
             default:
                 break;

@@ -7,7 +7,7 @@ const AutocompleteItem = (props) => {
         const searchValue = props.searchValue;
         const index = props.value.toLowerCase().indexOf(props.searchValue.toLowerCase());
 
-        const start = <span key="1">{value.substr(0, index)}</span>;
+        const start = index > 0 ? <span key="1">{value.substr(0, index)}</span> : null;
         const bold = <b key="2">{value.substr(index, searchValue.length)}</b>;
         const end = <span key="3">{value.substr(index + searchValue.length)}</span>;
 

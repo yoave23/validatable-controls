@@ -1,6 +1,6 @@
 {
   "name": "validatable-controls",
-  "version": "1.1.5",
+  "version": "1.1.7",
   "main": "dist/index.js",
   "license": "MIT",
   "repository": "https://github.com/yoave23/validatable-controls.git",
