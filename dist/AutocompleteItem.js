@@ -18,11 +18,11 @@ var AutocompleteItem = function AutocompleteItem(props) {
         var searchValue = props.searchValue;
         var index = props.value.toLowerCase().indexOf(props.searchValue.toLowerCase());
 
-        var start = _react2.default.createElement(
+        var start = index > 0 ? _react2.default.createElement(
             'span',
             { key: '1' },
             value.substr(0, index)
-        );
+        ) : null;
         var bold = _react2.default.createElement(
             'b',
             { key: '2' },

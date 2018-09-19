@@ -42,7 +42,7 @@ var Autocomplete = function (_Component) {
         var _this = _possibleConstructorReturn(this, (Autocomplete.__proto__ || Object.getPrototypeOf(Autocomplete)).call(this, props));
 
         _this.closeList = function (element) {
-            _this.setState({ matchingItems: [] });
+            _this.setState({ matchingItems: [], currentFocus: -1 });
         };
 
         _this.onItemClick = function (value) {
@@ -98,7 +98,9 @@ var Autocomplete = function (_Component) {
                     _this.setState({ currentFocus: _this.state.currentFocus - 1 });
                     break;
                 case 13:
-                    _this.setState({ currentFocus: _this.state.currentFocus - 1 });
+                    if (_this.state.currentFocus > -1) {
+                        _this.onItemClick(_this.state.matchingItems[_this.state.currentFocus]);
+                    }
                     break;
                 default:
                     break;
