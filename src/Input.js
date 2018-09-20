@@ -51,8 +51,10 @@ class Input extends Component {
                 return;
             }
         });
-
         this.setState({ errorMessage: tempMessage }, () => {
+            // console.log(this.props.onValidityChanged);
+            // console.log(this.inputRef.current);
+            // console.log(this.state.errorMessage);
             this.props.onValidityChanged(this.inputRef.current, this.state.errorMessage);
         });
     }

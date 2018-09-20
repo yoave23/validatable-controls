@@ -1,3 +1,4 @@
 import { Input } from './Input';
 import { Autocomplete } from './Autocomplete';
-export {  Input, Autocomplete };
+import { Select } from './Select';
+export { Input, Autocomplete, Select };
