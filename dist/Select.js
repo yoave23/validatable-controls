@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.Select = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -26,13 +27,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Input = function (_Component) {
-    _inherits(Input, _Component);
+var Select = function (_Component) {
+    _inherits(Select, _Component);
 
-    function Input(props) {
-        _classCallCheck(this, Input);
+    function Select(props) {
+        _classCallCheck(this, Select);
 
-        var _this = _possibleConstructorReturn(this, (Input.__proto__ || Object.getPrototypeOf(Input)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Select.__proto__ || Object.getPrototypeOf(Select)).call(this, props));
 
         _this.onChange = function (e) {
             _this.validate(e.target.value);
@@ -66,7 +67,7 @@ var Input = function (_Component) {
             });
 
             _this.setState({ errorMessage: tempMessage }, function () {
-                _this.props.onValidityChanged(_this.innerRef.current, _this.state.errorMessage);
+                _this.props.onValidityChanged(_this.selectRef.current, _this.state.errorMessage);
             });
         };
 
@@ -82,15 +83,14 @@ var Input = function (_Component) {
             blurred: false
         };
 
-        // if a ref as passed use it, else create a new one
-        _this.innerRef = _this.props.innerRef || _react2.default.createRef();
+        _this.selectRef = _react2.default.createRef();
 
         // strip down props used internally (we'll call them later if needed)
-        _this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef'];
+        _this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged'];
         return _this;
     }
 
-    _createClass(Input, [{
+    _createClass(Select, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
             this.validate(this.props.value || '');
@@ -101,7 +101,11 @@ var Input = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'validatable' },
-                _react2.default.createElement('input', _extends({ ref: this.innerRef, onChange: this.onChange }, (0, _utils.getStrippedProps)(this.props, this.reservedProps), { onBlur: this.onBlur })),
+                _react2.default.createElement(
+                    'select',
+                    _extends({ ref: this.selectRef, onChange: this.onChange }, (0, _utils.getStrippedProps)(this.props, this.reservedProps), { onBlur: this.onBlur }),
+                    this.props.children
+                ),
                 _react2.default.createElement(
                     'div',
                     { className: 'error-msg' },
@@ -111,15 +115,13 @@ var Input = function (_Component) {
         }
     }]);
 
-    return Input;
+    return Select;
 }(_react.Component);
 
-Input.propTypes = {
+Select.propTypes = {
     submitted: _propTypes2.default.bool.isRequired,
     validationRules: _propTypes2.default.array,
     onValidityChanged: _propTypes2.default.func.isRequired
 };
 
-exports.default = _react2.default.forwardRef(function (props, ref) {
-    return _react2.default.createElement(Input, _extends({ innerRef: ref }, props));
-});
+exports.Select = Select;

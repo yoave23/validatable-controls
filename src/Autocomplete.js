@@ -15,8 +15,10 @@ class Autocomplete extends Component {
             errorMessage: '',
             blurred: false
         };
-        this.autoCompleteRef = React.createRef();
-        this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged'];
+
+        // if a ref as passed use it, else create a new one
+        this.innerRef = this.props.innerRef || React.createRef();
+        this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef'];
     }
 
     componentDidMount() {
@@ -115,7 +117,7 @@ class Autocomplete extends Component {
         });
 
         this.setState({ errorMessage: tempMessage }, () => {
-            this.props.onValidityChanged(this.autoCompleteRef.current, this.state.errorMessage);
+            this.props.onValidityChanged(this.innerRef.current, this.state.errorMessage);
         });
     }
 
@@ -129,7 +131,7 @@ class Autocomplete extends Component {
     render() {
         return (
             <div className="validatable autocomplete">
-                <input type="text" ref={this.autoCompleteRef} onChange={this.onChange}
+                <input type="text" ref={this.innerRef} onChange={this.onChange}
                     value={this.state.searchValue}
                     onKeyDown={this.onKeyDown}
                     {...getStrippedProps(this.props, this.reservedProps)} onBlur={this.onBlur} />
@@ -151,4 +153,4 @@ Autocomplete.propTypes = {
     onValidityChanged: PropTypes.func.isRequired
 };
 
-export { Autocomplete };
+export default React.forwardRef((props, ref) => <Autocomplete innerRef={ref} {...props} />);
