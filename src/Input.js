@@ -11,10 +11,11 @@ class Input extends Component {
             blurred: false
         };
 
-        this.inputRef = React.createRef();
+        // if a ref as passed use it, else create a new one
+        this.innerRef = this.props.innerRef || React.createRef();
 
         // strip down props used internally (we'll call them later if needed)
-        this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged'];
+        this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef'];
     }
 
     componentDidMount() {
@@ -51,11 +52,9 @@ class Input extends Component {
                 return;
             }
         });
+
         this.setState({ errorMessage: tempMessage }, () => {
-            // console.log(this.props.onValidityChanged);
-            // console.log(this.inputRef.current);
-            // console.log(this.state.errorMessage);
-            this.props.onValidityChanged(this.inputRef.current, this.state.errorMessage);
+            this.props.onValidityChanged(this.innerRef.current, this.state.errorMessage);
         });
     }
 
@@ -64,13 +63,12 @@ class Input extends Component {
             return this.state.errorMessage;
         }
         return '';
-
     }
 
     render() {
         return (
             <div className="validatable">
-                <input ref={this.inputRef} onChange={this.onChange} {...getStrippedProps(this.props, this.reservedProps)} onBlur={this.onBlur} />
+                <input ref={this.innerRef} onChange={this.onChange} {...getStrippedProps(this.props, this.reservedProps)} onBlur={this.onBlur} />
                 <div className="error-msg">
                     {this.getErrorMessage()}
                 </div>
@@ -85,4 +83,4 @@ Input.propTypes = {
     onValidityChanged: PropTypes.func.isRequired
 };
 
-export { Input };
+export default React.forwardRef((props, ref) => <Input innerRef={ref} {...props} />);

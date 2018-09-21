@@ -1,6 +1,7 @@
 {
   "name": "validatable-controls",
   "version": "1.2.7",
+  "author": "Yoav Eyal",
   "main": "dist/index.js",
   "license": "MIT",
   "repository": "https://github.com/yoave23/validatable-controls.git",
