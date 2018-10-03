@@ -16,7 +16,7 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _utils = require('./utils');
+var _ControlHoc = require('./ControlHoc');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34,49 +34,6 @@ var Input = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (Input.__proto__ || Object.getPrototypeOf(Input)).call(this, props));
 
-        _this.onChange = function (e) {
-            _this.validate(e.target.value);
-            if (_this.props.onChange) {
-                _this.props.onChange(e);
-            }
-        };
-
-        _this.onBlur = function (e) {
-            e.persist();
-            if (_this.props.onBlur) {
-                _this.props.onBlur(e);
-            }
-
-            _this.setState({ blurred: true }, function () {
-                _this.validate(e.target.value);
-            });
-        };
-
-        _this.validate = function (value) {
-            if (!_this.props.validationRules) {
-                return;
-            }
-            var tempMessage = '';
-            _this.props.validationRules.forEach(function (rule) {
-                var message = rule(value);
-                if (message) {
-                    tempMessage = message;
-                    return;
-                }
-            });
-
-            _this.setState({ errorMessage: tempMessage }, function () {
-                _this.props.onValidityChanged(_this.innerRef.current, _this.state.errorMessage);
-            });
-        };
-
-        _this.getErrorMessage = function () {
-            if (_this.state.blurred || _this.props.submitted) {
-                return _this.state.errorMessage;
-            }
-            return '';
-        };
-
         _this.state = {
             errorMessage: '',
             blurred: false
@@ -84,28 +41,22 @@ var Input = function (_Component) {
 
         // if a ref as passed use it, else create a new one
         _this.innerRef = _this.props.innerRef || _react2.default.createRef();
-
-        // strip down props used internally (we'll call them later if needed)
-        _this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef'];
         return _this;
     }
 
     _createClass(Input, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.validate(this.props.value || '');
-        }
-    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
                 'div',
                 { className: 'validatable' },
-                _react2.default.createElement('input', _extends({ ref: this.innerRef, onChange: this.onChange }, (0, _utils.getStrippedProps)(this.props, this.reservedProps), { onBlur: this.onBlur })),
+                _react2.default.createElement('input', _extends({ ref: this.innerRef, onChange: this.props.onChange
+                }, this.props.getThinProps(this.props, this.props.reservedProps), {
+                    onBlur: this.props.onBlur })),
                 _react2.default.createElement(
                     'div',
                     { className: 'error-msg' },
-                    this.getErrorMessage()
+                    this.props.getErrorMessage()
                 )
             );
         }
@@ -120,6 +71,6 @@ Input.propTypes = {
     onValidityChanged: _propTypes2.default.func.isRequired
 };
 
-exports.default = _react2.default.forwardRef(function (props, ref) {
+exports.default = (0, _ControlHoc.controlHoc)(_react2.default.forwardRef(function (props, ref) {
     return _react2.default.createElement(Input, _extends({ innerRef: ref }, props));
-});
+}));

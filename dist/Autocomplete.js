@@ -20,7 +20,7 @@ var _AutocompleteItem = require('./AutocompleteItem');
 
 var _AutocompleteItem2 = _interopRequireDefault(_AutocompleteItem);
 
-var _utils = require('./utils');
+var _ControlHoc = require('./ControlHoc');
 
 require('./Autocomplete.css');
 
@@ -73,7 +73,7 @@ var Autocomplete = function (_Component) {
             _this.setState({ searchValue: val });
             _this.closeList();
 
-            _this.validate(e.target.value);
+            _this.props.validate(e.target.value);
             if (_this.props.onChange) {
                 _this.props.onChange(e);
             }
@@ -106,42 +106,6 @@ var Autocomplete = function (_Component) {
             }
         };
 
-        _this.onBlur = function (e) {
-            e.persist();
-            if (_this.props.onBlur) {
-                _this.props.onBlur(e);
-            }
-
-            _this.setState({ blurred: true }, function () {
-                _this.validate(e.target.value);
-            });
-        };
-
-        _this.validate = function (value) {
-            if (!_this.props.validationRules) {
-                return;
-            }
-            var tempMessage = '';
-            _this.props.validationRules.forEach(function (rule) {
-                var message = rule(value);
-                if (message) {
-                    tempMessage = message;
-                    return;
-                }
-            });
-
-            _this.setState({ errorMessage: tempMessage }, function () {
-                _this.props.onValidityChanged(_this.innerRef.current, _this.state.errorMessage);
-            });
-        };
-
-        _this.getErrorMessage = function () {
-            if (_this.state.blurred || _this.props.submitted) {
-                return _this.state.errorMessage;
-            }
-            return '';
-        };
-
         _this.state = {
             searchValue: '',
             matchingItems: [],
@@ -152,7 +116,6 @@ var Autocomplete = function (_Component) {
 
         // if a ref as passed use it, else create a new one
         _this.innerRef = _this.props.innerRef || _react2.default.createRef();
-        _this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef'];
         return _this;
     }
 
@@ -160,7 +123,6 @@ var Autocomplete = function (_Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             document.addEventListener("click", this.closeList);
-            this.validate(this.props.value || '');
         }
     }, {
         key: 'componentWillUnmount',
@@ -173,10 +135,13 @@ var Autocomplete = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'validatable autocomplete' },
-                _react2.default.createElement('input', _extends({ type: 'text', ref: this.innerRef, onChange: this.onChange,
+                _react2.default.createElement('input', _extends({ type: 'text',
+                    ref: this.innerRef,
+                    onChange: this.onChange,
                     value: this.state.searchValue,
-                    onKeyDown: this.onKeyDown
-                }, (0, _utils.getStrippedProps)(this.props, this.reservedProps), { onBlur: this.onBlur })),
+                    onKeyDown: this.onKeyDown,
+                    onBlur: this.props.onBlur
+                }, this.props.getThinProps(this.props, this.props.reservedProps))),
                 _react2.default.createElement(
                     'div',
                     { id: this.props.id + "autocomplete-list", className: 'autocomplete-items' },
@@ -185,7 +150,7 @@ var Autocomplete = function (_Component) {
                 _react2.default.createElement(
                     'div',
                     { className: 'error-msg' },
-                    this.getErrorMessage()
+                    this.props.getErrorMessage()
                 )
             );
         }
@@ -201,6 +166,6 @@ Autocomplete.propTypes = {
     onValidityChanged: _propTypes2.default.func.isRequired
 };
 
-exports.default = _react2.default.forwardRef(function (props, ref) {
+exports.default = (0, _ControlHoc.controlHoc)(_react2.default.forwardRef(function (props, ref) {
     return _react2.default.createElement(Autocomplete, _extends({ innerRef: ref }, props));
-});
+}));

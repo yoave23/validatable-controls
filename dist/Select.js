@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Select = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -17,7 +16,7 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _utils = require('./utils');
+var _ControlHoc = require('./ControlHoc');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35,67 +34,17 @@ var Select = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (Select.__proto__ || Object.getPrototypeOf(Select)).call(this, props));
 
-        _this.onChange = function (e) {
-            _this.validate(e.target.value);
-            if (_this.props.onChange) {
-                _this.props.onChange(e);
-            }
-        };
-
-        _this.onBlur = function (e) {
-            e.persist();
-            if (_this.props.onBlur) {
-                _this.props.onBlur(e);
-            }
-
-            _this.setState({ blurred: true }, function () {
-                _this.validate(e.target.value);
-            });
-        };
-
-        _this.validate = function (value) {
-            if (!_this.props.validationRules) {
-                return;
-            }
-            var tempMessage = '';
-            _this.props.validationRules.forEach(function (rule) {
-                var message = rule(value);
-                if (message) {
-                    tempMessage = message;
-                    return;
-                }
-            });
-
-            _this.setState({ errorMessage: tempMessage }, function () {
-                _this.props.onValidityChanged(_this.selectRef.current, _this.state.errorMessage);
-            });
-        };
-
-        _this.getErrorMessage = function () {
-            if (_this.state.blurred || _this.props.submitted) {
-                return _this.state.errorMessage;
-            }
-            return '';
-        };
-
         _this.state = {
             errorMessage: '',
             blurred: false
         };
 
-        _this.selectRef = _react2.default.createRef();
-
-        // strip down props used internally (we'll call them later if needed)
-        _this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged'];
+        // if a ref as passed use it, else create a new one
+        _this.innerRef = _this.props.innerRef || _react2.default.createRef();
         return _this;
     }
 
     _createClass(Select, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.validate(this.props.value || '');
-        }
-    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
@@ -103,13 +52,15 @@ var Select = function (_Component) {
                 { className: 'validatable' },
                 _react2.default.createElement(
                     'select',
-                    _extends({ ref: this.selectRef, onChange: this.onChange }, (0, _utils.getStrippedProps)(this.props, this.reservedProps), { onBlur: this.onBlur }),
+                    _extends({ ref: this.innerRef, onChange: this.props.onChange
+                    }, this.props.getThinProps(this.props, this.props.reservedProps), {
+                        onBlur: this.props.onBlur }),
                     this.props.children
                 ),
                 _react2.default.createElement(
                     'div',
                     { className: 'error-msg' },
-                    this.getErrorMessage()
+                    this.props.getErrorMessage()
                 )
             );
         }
@@ -124,4 +75,7 @@ Select.propTypes = {
     onValidityChanged: _propTypes2.default.func.isRequired
 };
 
-exports.Select = Select;
+//export { Select };
+exports.default = (0, _ControlHoc.controlHoc)(_react2.default.forwardRef(function (props, ref) {
+    return _react2.default.createElement(Select, _extends({ innerRef: ref }, props));
+}));
