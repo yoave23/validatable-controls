@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Autocomplete = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -132,7 +131,7 @@ var Autocomplete = function (_Component) {
             });
 
             _this.setState({ errorMessage: tempMessage }, function () {
-                _this.props.onValidityChanged(_this.autoCompleteRef.current, _this.state.errorMessage);
+                _this.props.onValidityChanged(_this.innerRef.current, _this.state.errorMessage);
             });
         };
 
@@ -150,8 +149,10 @@ var Autocomplete = function (_Component) {
             errorMessage: '',
             blurred: false
         };
-        _this.autoCompleteRef = _react2.default.createRef();
-        _this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged'];
+
+        // if a ref as passed use it, else create a new one
+        _this.innerRef = _this.props.innerRef || _react2.default.createRef();
+        _this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef'];
         return _this;
     }
 
@@ -172,7 +173,7 @@ var Autocomplete = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'validatable autocomplete' },
-                _react2.default.createElement('input', _extends({ type: 'text', ref: this.autoCompleteRef, onChange: this.onChange,
+                _react2.default.createElement('input', _extends({ type: 'text', ref: this.innerRef, onChange: this.onChange,
                     value: this.state.searchValue,
                     onKeyDown: this.onKeyDown
                 }, (0, _utils.getStrippedProps)(this.props, this.reservedProps), { onBlur: this.onBlur })),
@@ -200,4 +201,6 @@ Autocomplete.propTypes = {
     onValidityChanged: _propTypes2.default.func.isRequired
 };
 
-exports.Autocomplete = Autocomplete;
+exports.default = _react2.default.forwardRef(function (props, ref) {
+    return _react2.default.createElement(Autocomplete, _extends({ innerRef: ref }, props));
+});
