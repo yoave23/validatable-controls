@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AutocompleteItem from './AutocompleteItem';
-import { getStrippedProps } from './utils';
+import { controlHoc } from './ControlHoc';
 import './Autocomplete.css';
 
 class Autocomplete extends Component {
@@ -18,12 +18,10 @@ class Autocomplete extends Component {
 
         // if a ref as passed use it, else create a new one
         this.innerRef = this.props.innerRef || React.createRef();
-        this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef'];
     }
 
     componentDidMount() {
         document.addEventListener("click", this.closeList);
-        this.validate(this.props.value || '');
     }
 
     componentWillUnmount() {
@@ -61,7 +59,7 @@ class Autocomplete extends Component {
         this.setState({ searchValue: val });
         this.closeList();
 
-        this.validate(e.target.value);
+        this.props.validate(e.target.value);
         if (this.props.onChange) {
             this.props.onChange(e);
         }
@@ -92,54 +90,21 @@ class Autocomplete extends Component {
         }
     }
 
-    onBlur = (e) => {
-        e.persist();
-        if (this.props.onBlur) {
-            this.props.onBlur(e);
-        }
-
-        this.setState({ blurred: true }, () => {
-            this.validate(e.target.value);
-        });
-    }
-
-    validate = (value) => {
-        if (!this.props.validationRules) {
-            return;
-        }
-        let tempMessage = '';
-        this.props.validationRules.forEach(rule => {
-            let message = rule(value);
-            if (message) {
-                tempMessage = message;
-                return;
-            }
-        });
-
-        this.setState({ errorMessage: tempMessage }, () => {
-            this.props.onValidityChanged(this.innerRef.current, this.state.errorMessage);
-        });
-    }
-
-    getErrorMessage = () => {
-        if (this.state.blurred || this.props.submitted) {
-            return this.state.errorMessage;
-        }
-        return '';
-    }
-
     render() {
         return (
             <div className="validatable autocomplete">
-                <input type="text" ref={this.innerRef} onChange={this.onChange}
+                <input type="text"
+                    ref={this.innerRef}
+                    onChange={this.onChange}
                     value={this.state.searchValue}
                     onKeyDown={this.onKeyDown}
-                    {...getStrippedProps(this.props, this.reservedProps)} onBlur={this.onBlur} />
+                    onBlur={this.props.onBlur}
+                    {...this.props.getThinProps(this.props, this.props.reservedProps)} />
                 <div id={this.props.id + "autocomplete-list"} className="autocomplete-items">
                     {this.getItems()}
                 </div>
                 <div className="error-msg">
-                    {this.getErrorMessage()}
+                    {this.props.getErrorMessage()}
                 </div>
             </div>
         )
@@ -153,4 +118,4 @@ Autocomplete.propTypes = {
     onValidityChanged: PropTypes.func.isRequired
 };
 
-export default React.forwardRef((props, ref) => <Autocomplete innerRef={ref} {...props} />);
+export default controlHoc(React.forwardRef((props, ref) => <Autocomplete innerRef={ref} {...props} />));
