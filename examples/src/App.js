@@ -61,7 +61,6 @@ class App extends Component {
     render() {
         return (
             <div className="example-container">
-                <Htest />
                 <form onSubmit={this.onSubmit}>
                     <div className="control-group">
                         <label>Autocomplete</label>
