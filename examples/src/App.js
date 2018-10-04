@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Input, Select, HInput } from '../../src';
 import { Autocomplete } from '../../src';
 import './App.css';
-import Htest from './Htest';
 
 class App extends Component {
     constructor(props) {
