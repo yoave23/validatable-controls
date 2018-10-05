@@ -65,3 +65,27 @@ class App extends Component {
     }
 }
 ```
+### validation rules
+validation rules are functions passed as `props` in an array.
+the validation function is invoked on `componentDidMount`, `onBlur` and `onChange` and is invoked with control's value as a parameter.
+the validation function should return an error text if the validation did not pass or an empty string if it did.
+example:
+```
+shouldBeLessThanTen = (value) => {
+    if (!value || value.length < 10) {
+        return ''
+    }
+    return 'value length should be less than ten';
+}
+```
+this will be passed to the control like this:
+```
+<Input submitted={this.state.submitted}
+    onValidityChanged={this.onValidityChanged}
+    // right here ▼
+    validationRules={[this.shouldBeLessThanTen]}
+    name="testInput"
+    value={this.state.testInput}
+    onChange={this.onChange} 
+    ref={this.inputRef}/>
+```
