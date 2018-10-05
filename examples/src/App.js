@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Input, Select, HInput } from '../../src';
-import { Autocomplete } from '../../src';
+import { Input, Select, Autocomplete } from '../../src';
+import { formHoc } from '../../src/FormHoc';
 import './App.css';
-import Htest from './Htest';
 
 class App extends Component {
     constructor(props) {
@@ -78,8 +77,8 @@ class App extends Component {
                             validationRules={[this.shouldBeEven, this.shouldBeLessThanTen]}
                             name="testInput"
                             value={this.state.testInput}
-                            onChange={this.onChange} 
-                            ref={this.inputRef}/>
+                            onChange={this.onChange}
+                            ref={this.inputRef} />
                     </div>
 
                     <div className="control-group">
@@ -92,10 +91,11 @@ class App extends Component {
                     </div>
                     <button onClick={this.onSubmit}>Submit</button>
                 </form>
+
                 Form is valid: {this.isFormValid() ? 'yes' : 'no'}
             </div>
         )
     }
 }
 
-export default App;
+export default formHoc(App);
