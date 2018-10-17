@@ -19,6 +19,10 @@ export function controlHoc(WrappedControl) {
             this.validate(this.props.value || '');
         }
 
+        componentWillUnmount() {
+            this.props.onValidityChanged(this.props.name, true, '');
+        }
+
         getErrorMessage = () => {
             if (this.state.blurred || this.props.submitted) {
                 return this.state.errorMessage;
