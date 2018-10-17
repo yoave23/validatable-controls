@@ -12,7 +12,7 @@ export function controlHoc(WrappedControl) {
             this.controlRef = React.createRef();
 
             // strip down props used internally (we'll call them later if needed)
-            this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef', 'getErrorMessage', 'validate', 'reservedProps', 'getThinProps'];
+            this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef', 'getErrorMessage', 'validate', 'reservedProps', 'getThinProps', 'customValidations'];
         }
 
         componentDidMount() {
