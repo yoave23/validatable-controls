@@ -25,7 +25,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function controlHoc(WrappedControl) {
     var _class, _temp, _initialiseProps;
 
-    return _temp = _class = function (_Component) {
+    var ControlHoc = (_temp = _class = function (_Component) {
         _inherits(ControlHoc, _Component);
 
         function ControlHoc(props) {
@@ -42,7 +42,7 @@ function controlHoc(WrappedControl) {
             _this.controlRef = _react2.default.createRef();
 
             // strip down props used internally (we'll call them later if needed)
-            _this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef', 'getErrorMessage', 'validate', 'reservedProps', 'getThinProps'];
+            _this.reservedProps = ['forwardedRef', 'onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef', 'getErrorMessage', 'validate', 'reservedProps', 'getThinProps'];
             return _this;
         }
 
@@ -52,13 +52,20 @@ function controlHoc(WrappedControl) {
                 this.validate(this.props.value || '');
             }
         }, {
+            key: 'componentWillUnmount',
+            value: function componentWillUnmount() {
+                this.props.onValidityChanged(this.props.name, true, '');
+            }
+        }, {
             key: 'render',
             value: function render() {
+                var forwardedRef = this.props.forwardedRef;
+
                 return _react2.default.createElement(WrappedControl, _extends({}, this.props, {
                     getErrorMessage: this.getErrorMessage,
                     onChange: this.onChange,
                     onBlur: this.onBlur,
-                    ref: this.controlRef,
+                    ref: forwardedRef,
                     validate: this.validate,
                     reservedProps: this.reservedProps,
                     getThinProps: this.getThinProps }));
@@ -107,7 +114,7 @@ function controlHoc(WrappedControl) {
                 }
             });
             _this2.setState({ errorMessage: tempMessage }, function () {
-                _this2.props.onValidityChanged(_this2.controlRef.current, _this2.state.errorMessage);
+                _this2.props.onValidityChanged(_this2.props.name, _this2.state.errorMessage);
             });
         };
 
@@ -124,5 +131,9 @@ function controlHoc(WrappedControl) {
             }
             return thinProps;
         };
-    }, _temp;
+    }, _temp);
+
+    return _react2.default.forwardRef(function (props, ref) {
+        return _react2.default.createElement(ControlHoc, _extends({}, props, { forwardedRef: ref }));
+    });
 }
