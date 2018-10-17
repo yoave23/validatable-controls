@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 export function controlHoc(WrappedControl) {
-    return class ControlHoc extends Component {
+    class ControlHoc extends Component {
         constructor(props) {
             super(props);
 
@@ -12,11 +12,15 @@ export function controlHoc(WrappedControl) {
             this.controlRef = React.createRef();
 
             // strip down props used internally (we'll call them later if needed)
-            this.reservedProps = ['onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef', 'getErrorMessage', 'validate', 'reservedProps', 'getThinProps', 'customValidations'];
+            this.reservedProps = ['forwardedRef', 'onChange', 'submitted', 'validationRules', 'onValidityChanged', 'innerRef', 'getErrorMessage', 'validate', 'reservedProps', 'getThinProps', 'customValidations'];
         }
 
         componentDidMount() {
             this.validate(this.props.value || '');
+        }
+
+        componentWillUnmount() {
+            this.props.onValidityChanged(this.props.name, true, '');
         }
 
         getErrorMessage = () => {
@@ -57,7 +61,7 @@ export function controlHoc(WrappedControl) {
                 }
             });
             this.setState({ errorMessage: tempMessage }, () => {
-                this.props.onValidityChanged(this.controlRef.current, this.state.errorMessage);
+                this.props.onValidityChanged(this.props.name, this.state.errorMessage);
             });
         }
 
@@ -76,17 +80,22 @@ export function controlHoc(WrappedControl) {
         }
 
         render() {
+            const { forwardedRef } = this.props;
             return (
                 <WrappedControl
                     {...this.props}
                     getErrorMessage={this.getErrorMessage}
                     onChange={this.onChange}
                     onBlur={this.onBlur}
-                    ref={this.controlRef}
+                    ref={forwardedRef}
                     validate={this.validate}
                     reservedProps={this.reservedProps}
                     getThinProps={this.getThinProps} />
             )
         }
+
     }
+    return React.forwardRef((props, ref) => {
+        return <ControlHoc {...props} forwardedRef={ref} />;
+    });
 }
