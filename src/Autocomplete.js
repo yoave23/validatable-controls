@@ -47,7 +47,7 @@ class Autocomplete extends Component {
     }
 
     componentDidUpdate() {
-        console.log('%c UPDATED', 'background: #444; color: #bada55');
+        //console.log('%c UPDATED', 'background: #444; color: #bada55');
     }
 
     componentDidMount() {
@@ -86,6 +86,9 @@ class Autocomplete extends Component {
 
     onChange = (e) => {
         let val = e.target.value;
+        if (val.trim() === this.state.searchValue.trim()) {
+            return;
+        }
         this.setState({ searchValue: val });
         this.closeList();
 
