@@ -1,6 +1,6 @@
 {
   "name": "validatable-controls",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "author": "Yoav Eyal",
   "main": "dist/index.js",
   "license": "MIT",
