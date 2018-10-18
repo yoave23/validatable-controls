@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AutocompleteItem from './AutocompleteItem';
 import { controlHoc } from './ControlHoc';
+//import { areObjectsEqual } from './utils';
 import './Autocomplete.css';
 
 class Autocomplete extends Component {
@@ -18,6 +19,35 @@ class Autocomplete extends Component {
 
         // if a ref as passed use it, else create a new one
         this.innerRef = this.props.innerRef || React.createRef();
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        let shouldUpdate = false;
+        if (this.state.searchValue !== nextState.searchValue ||
+            !this.areArraysEqual(this.state.matchingItems, nextState.matchingItems) ||
+            this.state.currentFocus !== nextState.currentFocus) {
+            shouldUpdate = true;
+        }
+        return shouldUpdate;
+    }
+
+    areArraysEqual = (arr1, arr2) => {
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+        let equal = true;
+        for (let index = 0; index < arr1.length; index++) {
+            const element1 = arr1[index];
+            if (arr2[index] !== element1) {
+                equal = false;
+                return false;
+            }
+        }
+        return equal;
+    }
+
+    componentDidUpdate() {
+        console.log('%c UPDATED', 'background: #444; color: #bada55');
     }
 
     componentDidMount() {
