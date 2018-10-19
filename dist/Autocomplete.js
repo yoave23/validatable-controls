@@ -31,6 +31,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+//import { areObjectsEqual } from './utils';
+
 
 var Autocomplete = function (_Component) {
     _inherits(Autocomplete, _Component);
@@ -39,6 +41,21 @@ var Autocomplete = function (_Component) {
         _classCallCheck(this, Autocomplete);
 
         var _this = _possibleConstructorReturn(this, (Autocomplete.__proto__ || Object.getPrototypeOf(Autocomplete)).call(this, props));
+
+        _this.areArraysEqual = function (arr1, arr2) {
+            if (arr1.length !== arr2.length) {
+                return false;
+            }
+            var equal = true;
+            for (var index = 0; index < arr1.length; index++) {
+                var element1 = arr1[index];
+                if (arr2[index] !== element1) {
+                    equal = false;
+                    return false;
+                }
+            }
+            return equal;
+        };
 
         _this.closeList = function (element) {
             _this.setState({ matchingItems: [], currentFocus: -1 });
@@ -70,6 +87,9 @@ var Autocomplete = function (_Component) {
 
         _this.onChange = function (e) {
             var val = e.target.value;
+            if (val.trim() === _this.state.searchValue.trim()) {
+                return;
+            }
             _this.setState({ searchValue: val });
             _this.closeList();
 
@@ -120,6 +140,20 @@ var Autocomplete = function (_Component) {
     }
 
     _createClass(Autocomplete, [{
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate(nextProps, nextState) {
+            var shouldUpdate = false;
+            if (this.state.searchValue !== nextState.searchValue || !this.areArraysEqual(this.state.matchingItems, nextState.matchingItems) || this.state.currentFocus !== nextState.currentFocus) {
+                shouldUpdate = true;
+            }
+            return shouldUpdate;
+        }
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate() {
+            //console.log('%c UPDATED', 'background: #444; color: #bada55');
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             document.addEventListener("click", this.closeList);

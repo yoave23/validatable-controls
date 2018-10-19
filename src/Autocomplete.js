@@ -24,6 +24,7 @@ class Autocomplete extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         let shouldUpdate = false;
         if (this.state.searchValue !== nextState.searchValue ||
+            this.props.value !== nextProps.value ||
             !this.areArraysEqual(this.state.matchingItems, nextState.matchingItems) ||
             this.state.currentFocus !== nextState.currentFocus) {
             shouldUpdate = true;
