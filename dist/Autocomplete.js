@@ -143,7 +143,7 @@ var Autocomplete = function (_Component) {
         key: 'shouldComponentUpdate',
         value: function shouldComponentUpdate(nextProps, nextState) {
             var shouldUpdate = false;
-            if (this.state.searchValue !== nextState.searchValue || !this.areArraysEqual(this.state.matchingItems, nextState.matchingItems) || this.state.currentFocus !== nextState.currentFocus) {
+            if (this.state.searchValue !== nextState.searchValue || this.props.value !== nextProps.value || !this.areArraysEqual(this.state.matchingItems, nextState.matchingItems) || this.state.currentFocus !== nextState.currentFocus) {
                 shouldUpdate = true;
             }
             return shouldUpdate;
