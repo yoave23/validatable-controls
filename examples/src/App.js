@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Select, Autocomplete } from '../../src';
+import { Input, MaterialInput, Select, Autocomplete } from '../../src';
 import { formHoc } from '../../src/FormHoc';
 import './App.css';
 
@@ -11,6 +11,7 @@ class App extends Component {
             validityStatus: {},
             submitted: false,
             testInput: 'test input',
+            materialInput: '',
             htestInput: 'h test input',
             testAutocomplete: ''
         };
@@ -90,7 +91,15 @@ class App extends Component {
                             onChange={this.onChange}
                             ref={this.inputRef} />
                     </div>
-
+                    <div className="control-group">
+                        <MaterialInput label="material"
+                            onValidityChanged={this.onValidityChanged}
+                            name="materialInput"
+                            onChange={this.onChange}
+                            value={this.state.materialInput}
+                            ref={this.inputRef}
+                        />
+                    </div>
                     <div className="control-group">
                         <label>Select</label>
                         <Select
