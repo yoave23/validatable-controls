@@ -92,7 +92,8 @@ class App extends Component {
                             ref={this.inputRef} />
                     </div>
                     <div className="control-group">
-                        <MaterialInput label="material"
+                        <MaterialInput submitted={this.state.submitted}
+                            label="material"
                             onValidityChanged={this.onValidityChanged}
                             name="materialInput"
                             onChange={this.onChange}

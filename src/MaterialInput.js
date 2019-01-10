@@ -11,19 +11,25 @@ class MaterialInput extends Component {
             blurred: false
         };
 
-        // if a ref as passed use it, else create a new one
+        // if a ref was passed use it, else create a new one
         this.innerRef = this.props.innerRef || React.createRef();
     }
 
     render() {
+        const inputProps = { ...this.props.getThinProps(this.props, this.props.reservedProps) };
+        const inputHasValue = (this.innerRef.current && this.innerRef.current.value) || '';
+        inputProps['className'] = (inputProps.className || '') + inputHasValue ? "hasValue" : "";
+
         return (
             <div className="validatable-material">
-                <input ref={this.innerRef} onChange={this.props.onChange}
-                    {...this.props.getThinProps(this.props, this.props.reservedProps)}
-                    onBlur={this.props.onBlur} />
+                <input ref={this.innerRef}
+                    onChange={this.props.onChange}
+                    onBlur={this.props.onBlur}
+                    {...inputProps}
+                />
                 <span className="highlight" />
                 <span className="bar" />
-                <label>{this.props.label}</label>
+                <label className="floating-label">{this.props.label}</label>
                 <div className="error-msg">
                     {this.props.getErrorMessage()}
                 </div>
