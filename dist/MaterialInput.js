@@ -41,7 +41,7 @@ var MaterialInput = function (_Component) {
             blurred: false
         };
 
-        // if a ref as passed use it, else create a new one
+        // if a ref was passed use it, else create a new one
         _this.innerRef = _this.props.innerRef || _react2.default.createRef();
         return _this;
     }
@@ -49,17 +49,22 @@ var MaterialInput = function (_Component) {
     _createClass(MaterialInput, [{
         key: 'render',
         value: function render() {
+            var inputProps = _extends({}, this.props.getThinProps(this.props, this.props.reservedProps));
+            var inputHasValue = this.innerRef.current && this.innerRef.current.value || '';
+            inputProps['className'] = (inputProps.className || '') + inputHasValue ? "hasValue" : "";
+
             return _react2.default.createElement(
                 'div',
                 { className: 'validatable-material' },
-                _react2.default.createElement('input', _extends({ ref: this.innerRef, onChange: this.props.onChange
-                }, this.props.getThinProps(this.props, this.props.reservedProps), {
-                    onBlur: this.props.onBlur })),
+                _react2.default.createElement('input', _extends({ ref: this.innerRef,
+                    onChange: this.props.onChange,
+                    onBlur: this.props.onBlur
+                }, inputProps)),
                 _react2.default.createElement('span', { className: 'highlight' }),
                 _react2.default.createElement('span', { className: 'bar' }),
                 _react2.default.createElement(
                     'label',
-                    null,
+                    { className: 'floating-label' },
                     this.props.label
                 ),
                 _react2.default.createElement(

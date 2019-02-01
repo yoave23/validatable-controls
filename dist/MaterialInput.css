@@ -24,7 +24,8 @@
     outline: none;
 }
 
-.validatable-material input:focus~label {
+.validatable-material input:focus~.floating-label,
+.validatable-material .hasValue~.floating-label{
     top: -14px;
     font-size: 12px;
     color: #2196F3;
