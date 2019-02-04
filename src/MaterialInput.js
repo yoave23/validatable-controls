@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { controlHoc } from './ControlHoc';
-import './MaterialInput.css';
+//import M from 'materialize-css';
+// import M from '../node_modules/materialize-css/dist/js/materialize.min.js';
+// import '../node_modules/materialize-css/dist/css/materialize.min.css';
 
 class MaterialInput extends Component {
     constructor(props) {
@@ -15,25 +17,31 @@ class MaterialInput extends Component {
         this.innerRef = this.props.innerRef || React.createRef();
     }
 
+    componentDidMount() {
+        //M.AutoInit(this.innerRef.current);
+        M.AutoInit(this.innerRef.current);
+    }
+
+    componentDidUpdate() {
+        M.AutoInit(this.innerRef.current);
+    }
+
     render() {
         const inputProps = { ...this.props.getThinProps(this.props, this.props.reservedProps) };
-        const inputHasValue = (this.innerRef.current && this.innerRef.current.value) || '';
-        inputProps['className'] = (inputProps.className || '') + inputHasValue ? "hasValue" : "";
+        if (!inputProps.id) {
+            inputProps.id = inputProps.name;
+        }
 
+        console.log(inputProps);
         return (
-            <div className="validatable-material">
-                <input ref={this.innerRef}
-                    onChange={this.props.onChange}
-                    onBlur={this.props.onBlur}
-                    {...inputProps}
-                />
-                <span className="highlight" />
-                <span className="bar" />
-                <label className="floating-label">{this.props.label}</label>
+            <React.Fragment>
+                <input ref={this.innerRef} onChange={this.props.onChange}
+                    {...inputProps} type="text" />
+                <label htmlFor={inputProps.id}>{this.props.label}</label>
                 <div className="error-msg">
                     {this.props.getErrorMessage()}
                 </div>
-            </div>
+            </React.Fragment>
         )
     }
 }
@@ -46,3 +54,19 @@ MaterialInput.propTypes = {
 };
 
 export default controlHoc(React.forwardRef((props, ref) => <MaterialInput innerRef={ref} {...props} />));
+
+/*
+            // <div className="validatable-material">
+            //     <input ref={this.innerRef}
+            //         onChange={this.props.onChange}
+            //         onBlur={this.props.onBlur}
+            //         {...inputProps}
+            //     />
+            //     <span className="highlight" />
+            //     <span className="bar" />
+            //     <label className="floating-label">{this.props.label}</label>
+            //     <div className="error-msg">
+            //         {this.props.getErrorMessage()}
+            //     </div>
+            // </div>
+*/

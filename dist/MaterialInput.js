@@ -50,8 +50,6 @@ var MaterialInput = function (_Component) {
         key: 'render',
         value: function render() {
             var inputProps = _extends({}, this.props.getThinProps(this.props, this.props.reservedProps));
-            var inputHasValue = this.innerRef.current && this.innerRef.current.value || '';
-            inputProps['className'] = (inputProps.className || '') + inputHasValue ? "hasValue" : "";
 
             return _react2.default.createElement(
                 'div',

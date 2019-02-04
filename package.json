@@ -1,6 +1,6 @@
 {
   "name": "validatable-controls",
-  "version": "2.2.7",
+  "version": "2.3.0",
   "author": "Yoav Eyal",
   "main": "dist/index.js",
   "license": "MIT",
@@ -17,7 +17,9 @@
     "transpile": "babel src -d dist --copy-files",
     "prepublish": "npm run transpile"
   },
-  "dependencies": {},
+  "dependencies": {
+    "materialize-css": "^1.0.0-rc.2"
+  },
   "peerDependencies": {},
   "devDependencies": {
     "babel-cli": "^6.26.0",

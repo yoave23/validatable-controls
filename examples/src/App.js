@@ -20,10 +20,11 @@ class App extends Component {
         this.selectItems = ["javascript", "java", "c++", "c#", "python"];
         this.inputRef = React.createRef();
         this.itemsRef = React.createRef();
+        this.materialInputRef = React.createRef();
     }
 
     componentDidMount() {
-        this.itemsRef.current.focus();
+        //this.itemsRef.current.focus();
         //this.inputRef.current.focus();
     }
 
@@ -32,10 +33,10 @@ class App extends Component {
         this.setState({ submitted: true });
     }
 
-    onValidityChanged = (input, errorMessage) => {
+    onValidityChanged = (inputName, errorMessage) => {
         this.setState(prevState => ({
             validityStatus: {
-                ...prevState.validityStatus, [input.name]: errorMessage
+                ...prevState.validityStatus, [inputName]: errorMessage
             }
         }));
     }
@@ -83,18 +84,21 @@ class App extends Component {
                     </div>
                     <div className="control-group">
                         <label>Input</label>
-                        <Input submitted={this.state.submitted}
+                        <Input
+                            submitted={this.state.submitted}
                             onValidityChanged={this.onValidityChanged}
                             validationRules={[this.shouldBeEven, this.shouldBeLessThanTen]}
                             name="testInput"
                             value={this.state.testInput}
                             onChange={this.onChange}
-                            ref={this.inputRef} />
+                            ref={this.materialInputRef} />
                     </div>
-                    <div className="control-group">
-                        <MaterialInput submitted={this.state.submitted}
-                            label="material"
+                    <div className="input-field control-group">
+                        <MaterialInput
+                            submitted={this.state.submitted}
                             onValidityChanged={this.onValidityChanged}
+                            validationRules={[this.required]}
+                            label="material"
                             name="materialInput"
                             onChange={this.onChange}
                             value={this.state.materialInput}
